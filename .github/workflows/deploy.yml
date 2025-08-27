@@ -1,0 +1,20 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: cd tteatro && git pull && rm -rf dist && rm -rf node_modules/.vite && rm -rf .astro && pnpm install && pnpm build && rm -rf /var/www/tteatro/* && cp -r dist/* /var/www/tteatro/
+      
