@@ -1,0 +1,62 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import MainLayout from "../../layouts/MainLayout.astro";
+import Tag from "../../components/Tag.astro";
+import "../../styles/global.css";
+import { slugify } from '../../utils/slugify';
+
+export async function getStaticPaths(){
+    const obras = await getCollection("obras");
+    return obras.map((obra) => ({
+        params: { slug: obra.slug },
+        props: { obra },
+    }));
+}
+
+type Props = {
+    obra: CollectionEntry<"obras">;
+};
+const { obra } = Astro.props;
+const {data: frontmatter} = obra;
+
+const { Content } = await obra.render()
+const company_href = `/compannia/${slugify(frontmatter.company)}`;
+---
+
+<MainLayout description={frontmatter.title}>
+
+    <header class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center">
+        <Image src={frontmatter.image}
+            alt={`Imagen de ${frontmatter.title}`}
+            class="absolute inset-0 w-full h-full object-cover"
+            widths={[400,800,1200]}
+            sizes="(max-width: 800px) 100vw, 1200px"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-brand-bg/70 to-transparent"></div>
+        <h1 class="relative z-10 font-display text-5xl md:text-7xl text-brand-dark text-center px-4 drop-shadow-lg">
+            {frontmatter.title}
+        </h1>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+            <section class="flex flex-wrap justify-between items-center gap-4 mb-8">
+                <div class="flex flex-wrap gap-2">
+                    {frontmatter.tags.map(tag => <Tag tag_name={tag} />)}
+                </div>
+                <a href={company_href} class="font-display text-2xl text-brand-dark hover:text-brand-red transition-colors">
+                    {frontmatter.company}
+                </a>
+            </section>
+            <section class="prose prose-lg max-w-none">
+                <Content />
+            </section>
+    </div>
+
+</MainLayout>
+
+<style is:global>
+    .prose h1, .prose h2, .prose h3 {
+        @apply font-display text-brand-dark;
+    }
+</style>

@@ -1,0 +1,47 @@
+---
+interface Props {
+  page: {
+    url: {
+      prev?: string;
+      next?: string;
+    };
+    currentPage: number;
+    lastPage: number;
+  };
+}
+const { page } = Astro.props;
+const { url, currentPage, lastPage } = page;
+---
+
+<div class="flex justify-between items-center mt-12">
+  <div>
+    {url.prev ? (
+      <a href={url.prev} class="pagination-link">
+        &larr; Página anterior
+      </a>
+    ) : (
+      <span class="pagination-link-disabled">&larr; Página anterior</span>
+    )}
+  </div>
+  <span class="font-sans text-sm text-brand-text/80">
+    Página {currentPage} de {lastPage}
+  </span>
+  <div>
+    {url.next ? (
+      <a href={url.next} class="pagination-link">
+        Próxima página &rarr;
+      </a>
+    ) : (
+      <span class="pagination-link-disabled">Próxima página &rarr;</span>
+    )}
+  </div>
+</div>
+
+<style>
+  .pagination-link {
+    @apply font-sans font-bold text-brand-red py-2 px-4 rounded-lg transition-colors hover:bg-brand-peach/20;
+  }
+  .pagination-link-disabled {
+    @apply font-sans font-bold text-brand-text/40 py-2 px-4 rounded-lg cursor-not-allowed;
+  }
+</style>

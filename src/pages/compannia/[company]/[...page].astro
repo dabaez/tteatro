@@ -1,0 +1,54 @@
+---
+import MainLayout from '../../../layouts/MainLayout.astro';
+import PlayCard from '../../../components/PlayCard.astro';
+import PaginationControls from '../../../components/PaginationControls.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '../../../utils/slugify.js';
+
+export async function getStaticPaths({ paginate }) { 
+  const allPlays = await getCollection('obras');
+  const uniqueCompanies = [...new Set(allPlays.flatMap(play => play.data.company))];
+
+  return uniqueCompanies.flatMap(company => {
+    const slug = slugify(company);
+    const filteredPlays = allPlays.filter(play => play.data.company === company);
+    const sortedPlays = filteredPlays.sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime());
+    return paginate(sortedPlays, {
+      pageSize: 6,
+      params: { company: slug },
+      props: { originalCompany: company },
+    });
+  });
+}
+const { page, originalCompany } = Astro.props;
+const { data: paginatedPlays, currentPage } = page;
+---
+<MainLayout 
+  title="Tteatro"
+  description={`Obras de la compañía ${originalCompany}.`}
+>
+  <div class="container mx-auto py-12 px-4">
+    <div class="text-center mb-8">
+      <p class="font-sans text-brand-text/70">Mostrando obras de la compañía</p>
+      <h1 class="font-display text-4xl text-brand-dark">{originalCompany}</h1>
+    </div>
+
+    <main class="lg:col-span-9">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      {paginatedPlays.map(obra => (
+        <PlayCard 
+          title={obra.data.title}
+          company={obra.data.company}
+          tags={obra.data.tags}
+          slug={obra.slug}
+          landscapeImage={obra.data.image}
+        />
+      ))}
+    </div>
+
+    <div class="mt-12">
+      <PaginationControls page={page} />
+    </div>
+    
+  </div>
+</MainLayout>

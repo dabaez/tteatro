@@ -1,0 +1,40 @@
+---
+import Search from "astro-pagefind/components/Search";
+---
+<header class="py-6 border-b border-brand-dark/10 bg-brand-peach/30">
+  <div class="container mx-auto px-4 flex justify-between items-center">
+    <div>
+      <a href="/" class="font-display text-2xl font-bold text-brand-dark hover:text-brand-red transition-colors">
+        Tteatro
+      </a>
+      <p class="font-sans text-sm italic text-brand-text/70 mt-1">
+        La extra t es por teatro
+      </p>
+    </div>
+    <div>
+      <Search id="search" className="pagefind-ui" uiOptions={{ showImages: false }} />
+    </div>
+  </div>
+</header>
+<style is:global>
+  nav {
+    display: grid;
+    place-items: center;
+  }
+
+  .pagefind-ui .pagefind-ui__drawer:not(.pagefind-ui__hidden) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: 0px;
+    z-index: 9999;
+    padding: 0 2em 1em;
+    overflow-y: auto;
+    box-shadow:
+      0 10px 10px -5px rgba(0, 0, 0, 0.2),
+      0 2px 2px 0 rgba(0, 0, 0, 0.1);
+    border-bottom-right-radius: var(--pagefind-ui-border-radius);
+    border-bottom-left-radius: var(--pagefind-ui-border-radius);
+    background-color: var(--pagefind-ui-background);
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import Tag from './Tag.astro';
+import { Image } from 'astro:assets';
+import { slugify } from '../utils/slugify';
+interface Props{
+    title: string;
+    tags: string[];
+    company: string;
+    landscapeImage: string;
+    slug: string;
+}
+const {title, tags, company, landscapeImage, slug: slug} = Astro.props;
+const company_href = `/compannia/${slugify(company)}`;
+const href = `/obras/${slug}`;
+---
+
+<div class="group block bg-white/50 border border-brand-peach/30 rounded-lg overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <a href={href} class="aspect-video block overflow-hidden">
+        <Image src={landscapeImage} alt={`Imagen de ${title}`} quality={80} format="webp" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"/>
+    </a>
+    <div>
+        <div class="p-4 flex flex-col space-y-3">
+            <a href={company_href} class="font-sans text-xs text-brand-text/70 uppercase tracking-wider hover:text-brand-red transition-colors w-fit">{company}</a>
+            <a href={href}>
+                <h2 class="font-display text-xl text-brand-dark leading-tight line-clamp-2 hover:text-brand-red transition-colors">{title}</h2>
+            </a>
+            <div class="mt-auto pt-4">
+                <div class="flex flex-wrap gap-2">
+                    {tags.slice(0, 3).map((tag) => (<Tag tag_name={tag} />))}
+                </div>
+            </div>
+        </div>
+    </div>
+</a>

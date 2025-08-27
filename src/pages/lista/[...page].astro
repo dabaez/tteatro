@@ -1,0 +1,35 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro"
+import PlayCard from "../../components/PlayCard.astro"
+import PaginationControls from "../../components/PaginationControls.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths({ paginate }){
+    const allPlays = await getCollection('obras');
+    const sortedPlays = allPlays.sort((a, b) => 
+      new Date(b.data.published).getTime() - new Date(a.data.published).getTime()
+    );
+    return paginate(sortedPlays, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+const { data: paginatedObras } = page;
+---
+<MainLayout>
+    <div class="container mx-auto py-12 px-4">
+        <main class="lg:col-span-9">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                {paginatedObras.map(play => (
+                    <PlayCard
+                        title={play.data.title}
+                        company={play.data.company}
+                        tags={play.data.tags}
+                        landscapeImage={play.data.image}
+                        slug={play.slug}
+                    />
+                ))}
+            </div>
+        </main>
+        <PaginationControls page={page} />
+    </div>
+</MainLayout>

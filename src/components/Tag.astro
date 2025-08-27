@@ -1,0 +1,11 @@
+---
+import { slugify } from '../utils/slugify.js';
+interface Props {
+	tag_name: string;
+}
+const {tag_name} = Astro.props;
+const href = `/tags/${slugify(tag_name)}`;
+---
+<a href={href} class="inline-block bg-brand-peach/20 text-brand-dark font-sans font-medium text-m py-1 px-3 rounded-full hover:bg-brand-peach/40 transition-colors whitespace-nowrap">
+    {tag_name}
+</a>
