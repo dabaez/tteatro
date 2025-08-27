@@ -6,8 +6,5 @@ import pagefind from "astro-pagefind";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx(), tailwind(), pagefind()],
-  redirects: {
-    '':'/lista'
-  }
+  integrations: [mdx(), tailwind(), pagefind()]
 });
