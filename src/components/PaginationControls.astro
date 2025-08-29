@@ -13,35 +13,58 @@ const { page } = Astro.props;
 const { url, currentPage, lastPage } = page;
 ---
 
-<div class="flex justify-between items-center mt-12">
-  <div>
-    {url.prev ? (
-      <a href={url.prev} class="pagination-link">
-        &larr; Página anterior
-      </a>
-    ) : (
-      <span class="pagination-link-disabled">&larr; Página anterior</span>
-    )}
+<div class="flex flex-wrap justify-between items-center gap-4 mt-12">
+    <div class="flex min-w-0 flex-1">
+      <div class="flex space-x-2">
+        {url.prev ? (
+          <a href={url.prev} class="pagination-link">
+            <div class="mr-1 flex-shrink:0">&larr;</div>
+            <div class="pagination-text">Página anterior</div>
+          </a>
+        ) : (
+          <span class="pagination-link-disabled">
+            <div class="mr-1 flex-shrink:0">&larr;</div>
+            <div class="pagination-text">Página anterior</div>
+          </span>
+        )}
+      </div>
+    </div>
+  <div class="flex-none mx-2 md:mx-4 flex justify-center">
+    <span class="font-sans text-sm text-brand-text/80 text-center whitespace-nowrap">
+      Página {currentPage} de {lastPage}
+    </span>
   </div>
-  <span class="font-sans text-sm text-brand-text/80">
-    Página {currentPage} de {lastPage}
-  </span>
-  <div>
-    {url.next ? (
-      <a href={url.next} class="pagination-link">
-        Próxima página &rarr;
-      </a>
-    ) : (
-      <span class="pagination-link-disabled">Próxima página &rarr;</span>
-    )}
-  </div>
+  <div class="flex min-w-0 flex-1 justify-end">
+      <div class="flex space-x-2">
+        {url.next ? (
+          <a href={url.next} class="pagination-link">
+            <div class="pagination-text">Próxima página</div>
+            <div class="mr-1 flex-shrink:0">&rarr;</div>
+          </a>
+        ) : (
+          <span class="pagination-link-disabled">
+            <div class="pagination-text">Próxima página</div>
+            <div class="mr-1 flex-shrink:0">&rarr;</div>
+          </span>
+        )}
+      </div>
+    </div>
 </div>
 
 <style>
   .pagination-link {
     @apply font-sans font-bold text-brand-red py-2 px-4 rounded-lg transition-colors hover:bg-brand-peach/20;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
   }
   .pagination-link-disabled {
     @apply font-sans font-bold text-brand-text/40 py-2 px-4 rounded-lg cursor-not-allowed;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+  .pagination-text {
+    white-space: normal;
   }
 </style>
