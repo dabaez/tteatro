@@ -82,8 +82,14 @@ const hasImages = imageBefore && imageAfter;
   .spoiler-container.image-after-active #image-after {
     opacity: 1;
   }
+  .spoiler-content .blur-sm {
+    filter: blur(4px);
+    transition: filter 0.3s ease-in-out;
+    pointer-events: none;
+  }
   .spoiler-container.text-revealed .spoiler-content .blur-sm {
     filter: none;
+    pointer-events: auto;
   }
   .spoiler-container.text-revealed .spoiler-content .prompt {
     opacity: 0;
