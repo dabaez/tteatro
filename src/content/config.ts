@@ -8,6 +8,7 @@ const obrasCollection = defineCollection({
     company: z.string(),
     tags: z.array(z.string()),
     image: image(),
+    tickets: z.string().url().optional(),
   }),
 });
 
