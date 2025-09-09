@@ -3,12 +3,11 @@ import MainLayout from "../../layouts/MainLayout.astro"
 import PlayCard from "../../components/PlayCard.astro"
 import PaginationControls from "../../components/PaginationControls.astro";
 import { getCollection } from "astro:content";
+import { sort } from "../../utils/sort";
 
 export async function getStaticPaths({ paginate }){
     const allPlays = await getCollection('obras');
-    const sortedPlays = allPlays.sort((a, b) => 
-      new Date(b.data.published).getTime() - new Date(a.data.published).getTime()
-    );
+    const sortedPlays = sort(allPlays);
     return paginate(sortedPlays, { pageSize: 6 });
 }
 

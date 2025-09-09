@@ -4,6 +4,7 @@ import PlayCard from '../../../components/PlayCard.astro';
 import PaginationControls from '../../../components/PaginationControls.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../../../utils/slugify.js';
+import { sort } from '../../../utils/sort.js';
 
 export async function getStaticPaths({ paginate }) { 
   const allPlays = await getCollection('obras');
@@ -12,7 +13,7 @@ export async function getStaticPaths({ paginate }) {
   return uniqueCompanies.flatMap(company => {
     const slug = slugify(company);
     const filteredPlays = allPlays.filter(play => play.data.company === company);
-    const sortedPlays = filteredPlays.sort((a, b) => new Date(b.data.published).getTime() - new Date(a.data.published).getTime());
+    const sortedPlays = sort(filteredPlays);
     return paginate(sortedPlays, {
       pageSize: 6,
       params: { company: slug },
