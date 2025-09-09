@@ -8,13 +8,34 @@ interface Props{
     company: string;
     landscapeImage: string;
     slug: string;
+    tickets?: string;
 }
-const {title, tags, company, landscapeImage, slug: slug} = Astro.props;
+const {title, tags, company, landscapeImage, tickets, slug: slug} = Astro.props;
 const company_href = `/compannia/${slugify(company)}`;
 const href = `/obras/${slug}`;
+const inTheaters = !!tickets;
 ---
 
-<div class="group block bg-white/50 border border-brand-peach/30 rounded-lg overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+<div class="group block relative bg-white/50 border border-brand-peach/30 rounded-lg overflow-hidden shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1" class:list={[
+    inTheaters && 'ring-2 ring-brand-red ring-offset-2 ring-offset-brand-bg'
+  ]}>
+  {inTheaters && (
+    <a 
+      href={tickets} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="
+        absolute top-0 right-0 z-10
+        bg-brand-red text-white 
+        px-3 py-1
+        rounded-bl-lg 
+        font-sans font-bold text-xs uppercase tracking-wider
+        hover:bg-brand-dark-red
+      "
+    >
+      EN CARTELERA
+    </a>
+  )}
     <a href={href} class="aspect-video block overflow-hidden">
         <Image src={landscapeImage} alt={`Imagen de ${title}`} quality={80} format="webp" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"/>
     </a>
