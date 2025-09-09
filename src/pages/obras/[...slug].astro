@@ -37,6 +37,23 @@ const company_href = `/compannia/${slugify(frontmatter.company)}`;
         <h1 class="relative z-10 font-display text-5xl md:text-7xl text-brand-dark text-center px-4 drop-shadow-lg">
             {frontmatter.title}
         </h1>
+        {frontmatter.tickets && (
+            <a 
+                href={frontmatter.tickets} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="
+                    absolute bottom-4
+                    bg-brand-red text-white 
+                    px-3 py-1
+                    rounded-lg 
+                    font-sans font-bold text-xl uppercase tracking-wider
+                    hover:bg-brand-dark-red
+                "
+            >
+                EN CARTELERA
+            </a>
+        )}
     </header>
 
     <div class="container mx-auto px-4 py-8 md:py-12">
