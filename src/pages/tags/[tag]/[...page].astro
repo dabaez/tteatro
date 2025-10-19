@@ -5,6 +5,7 @@ import PaginationControls from '../../../components/PaginationControls.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../../../utils/slugify.js';
 import { sort } from '../../../utils/sort.js';
+import { tagRecommendations } from '../../../utils/tag-recommendations.js';
 
 export async function getStaticPaths({ paginate }) { 
   const allPlays = await getCollection('obras');
@@ -32,6 +33,7 @@ const { data: paginatedPlays, currentPage } = page;
     <div class="text-center mb-8">
       <p class="font-sans text-brand-text/70">Mostrando obras con el tag</p>
       <h1 class="font-display text-4xl text-brand-dark">{originalTag}</h1>
+      <p class="font-sans text-xl text-brand-text/70">{tagRecommendations[originalTag]}</p>
     </div>
 
     <main class="lg:col-span-9">
