@@ -45,8 +45,6 @@ import Spoiler from '../../components/Spoiler.astro';
 import beforeImage from '../../assets/${slug}/inicio.png'
 import afterImage from '../../assets/${slug}/fin.png'
 
-# Recomendado a...
-
 # Sinopsis
 
 ### FICHA ARTÍSTICA:
