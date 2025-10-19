@@ -5,6 +5,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import Tag from "../../components/Tag.astro";
 import "../../styles/global.css";
 import { slugify } from '../../utils/slugify';
+import { tagRecommendations } from '../../utils/tag-recommendations';
 
 export async function getStaticPaths(){
     const obras = await getCollection("obras");
@@ -22,6 +23,10 @@ const {data: frontmatter} = obra;
 
 const { Content } = await obra.render()
 const company_href = `/compannia/${slugify(frontmatter.company)}`;
+
+const recommendations = frontmatter.tags
+    .map(tag => tagRecommendations[tag])
+    .filter(Boolean);
 ---
 
 <MainLayout description={frontmatter.title}>
@@ -66,6 +71,14 @@ const company_href = `/compannia/${slugify(frontmatter.company)}`;
                 </a>
             </section>
             <section class="prose prose-lg max-w-none">
+                {recommendations.length > 0 && (
+                    <h1 class="font-display text-brand-dark">Recomendado a...</h1>
+                    <ul>
+                        {recommendations.map((rec) => (
+                            <li>{rec}</li>
+                        ))}
+                    </ul>
+                )}
                 <Content />
             </section>
     </div>

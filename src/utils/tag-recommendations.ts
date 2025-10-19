@@ -1,0 +1,15 @@
+export const tagRecommendations: Record<string, string> = {
+  'Intensa': 'Personas que buscan una obra con momentos intensos que hagan retumbar el corazón.',
+  'Agridulce': 'Personas que buscan una obra agridulce: entretenida pero profundamente trágica.',
+  'Personajes': 'Personas que buscan una obra que desarrolla múltiples personajes interesantes.',
+  'No casual': 'Personas que no buscan una obra casual, sino una obra que demanda disposición y atención para ser apreciada correctamente.',
+  'Comedia': 'Personas que buscan una comedia de las buenas.',
+  'Peak': 'Personas que buscan una obra que tenga momentos qls insanos de buenos.',
+  'Caótica': 'Personas que no temen a que la obra se ponga rara.',
+  'Chilena': 'Personas que quieren una obra marcadamente chilena.',
+  'Dramática': 'Personas que buscan una obra dramática y profunda.',
+  'Rápida': 'Personas que buscan una obra con ritmo rápido y ágil.',
+  'Ligera': 'Personas que buscan una obra ligera y entretenida.',
+  'Reflexiva': 'Personas que buscan una obra que invite a la reflexión.',
+  'Emotiva': 'Personas que buscan una obra emotiva que toque el corazón.',
+};
