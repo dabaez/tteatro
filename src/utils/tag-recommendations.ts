@@ -4,7 +4,6 @@ export const tagRecommendations: Record<string, string> = {
   'No casual': 'Personas que no buscan una obra casual, sino una obra que demanda disposición y atención para ser apreciada correctamente.',
   'Comedia': 'Personas que buscan una comedia de las buenas.',
   'Peak': 'Personas que buscan una obra que tenga momentos qls insanos de buenos.',
-  'Caótica': 'Personas que no temen a que la obra se ponga rara.',
   'Chilena': 'Personas que quieren una obra marcadamente chilena.',
   'Guión 🔥': 'Personas que buscan una obra con diálogos potentes, hechos con cuidado.',
   'Agridulce': 'Personas que buscan una obra que, como la vida misma, no es completamente feliz ni completamente triste.',
@@ -13,4 +12,8 @@ export const tagRecommendations: Record<string, string> = {
   'Densa': 'Personas que no temen a una obra que toque temas y situaciones duras.',
   'Rápida': 'Personas que buscan una obra que nunca deja de moverse.',
   'Lenta': 'Personas que buscan una obra que dan tiempos para respirar y tomar todo a fondo.',
+  'Final feliz': 'Personas que buscan una obra con un final feliz que no los deje por el suelo (Se sorprenderían de cuántas obras no terminan bien).',
+  'Realista': 'Personas que buscan una obra que se sienta realista y creíble.',
+  'Poética': 'Personas que buscan una obra que sacrifica realismo por diálogos más poéticos y simbólicos.',
+  'Surreal': 'Personas que buscan una obra que exagera la realidad para mostrarla desde otro ángulo.',
 };
