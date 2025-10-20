@@ -4,7 +4,6 @@ export const tagRecommendations: Record<string, string> = {
   'No casual': 'Personas que no buscan una obra casual, sino una obra que demanda disposición y atención para ser apreciada correctamente.',
   'Comedia': 'Personas que buscan una comedia de las buenas.',
   'Peak': 'Personas que buscan una obra que tenga momentos qls insanos de buenos.',
-  'Chilena': 'Personas que quieren una obra marcadamente chilena.',
   'Guión 🔥': 'Personas que buscan una obra con diálogos potentes, hechos con cuidado.',
   'Agridulce': 'Personas que buscan una obra que, como la vida misma, no es completamente feliz ni completamente triste.',
   'Tragedia ágil': 'Personas que buscan una tragedia que se narra como si fuera una comedia.',
