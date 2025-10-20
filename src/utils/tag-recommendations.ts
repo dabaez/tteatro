@@ -10,8 +10,6 @@ export const tagRecommendations: Record<string, string> = {
   'Tragedia ágil': 'Personas que buscan una tragedia que se narra como si fuera una comedia.',
   'Ligera': 'Personas que buscan una obra ligera, que no pese mucho en el ánimo.',
   'Densa': 'Personas que no temen a una obra que toque temas y situaciones duras.',
-  'Rápida': 'Personas que buscan una obra que nunca deja de moverse.',
-  'Lenta': 'Personas que buscan una obra que dan tiempos para respirar y tomar todo a fondo.',
   'Final feliz': 'Personas que buscan una obra con un final feliz que no los deje por el suelo (Se sorprenderían de cuántas obras no terminan bien).',
   'Realista': 'Personas que buscan una obra que se sienta realista y creíble.',
   'Poética': 'Personas que buscan una obra que sacrifica realismo por diálogos más poéticos y simbólicos.',
