@@ -30,14 +30,15 @@ const { data: paginatedPlays, currentPage } = page;
   description={`Obras con el tag ${originalTag}.`}
 >
   <div class="container mx-auto py-12 px-4">
-    <div class="text-center mb-8">
-      <p class="font-sans text-brand-text/70">Mostrando obras con el tag</p>
-      <h1 class="font-display text-4xl text-brand-dark">{originalTag}</h1>
-      <p class="font-sans text-xl text-brand-text/70">{tagRecommendations[originalTag]}</p>
+    <div class="mb-10">
+      <a href="/lista" class="font-sans text-sm text-brand-red hover:text-brand-dark transition-colors inline-flex items-center gap-1 mb-6">&larr; Todas las obras</a>
+      <h1 class="font-display text-5xl md:text-6xl text-brand-dark mb-2">{originalTag}</h1>
+      {tagRecommendations[originalTag] && (
+        <p class="font-sans text-lg text-brand-text/70 max-w-xl">{tagRecommendations[originalTag]}</p>
+      )}
     </div>
 
-    <main class="lg:col-span-9">
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
       {paginatedPlays.map(obra => (
         <PlayCard 
           title={obra.data.title}

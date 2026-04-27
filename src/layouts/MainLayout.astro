@@ -1,31 +1,30 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 interface Props {
 	title?: string;
-	description?: string;
+	subtitle?: string;
 }
 const { 
   title = "Tteatro", 
-  description = "La extra t es por teatro" 
+  subtitle = "La extra t es por teatro" 
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-		<title>{title} - {description}</title>
+		<title>{title} - {subtitle}</title>
 	</head>
-	<body class="bg-brand-bg">
-		<main>
-			<Header />
+	<body class="bg-brand-bg flex flex-col min-h-screen">
+		<Header />
+		<main class="flex-1">
 			<slot />
 		</main>
+		<Footer />
 	</body>
 </html>
-<style is:global>
-    @reference "../styles/global.css";
-</style>

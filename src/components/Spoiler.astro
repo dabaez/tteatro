@@ -7,17 +7,22 @@ interface Props {
 }
 const {imageBefore, imageAfter} = Astro.props;
 const hasImages = imageBefore && imageAfter;
+const uid = Math.random().toString(36).slice(2, 9);
+const idBefore = `image-before-${uid}`;
+const idAfter = `image-after-${uid}`;
+const idToggleBefore = `toggle-before-${uid}`;
+const idToggleAfter = `toggle-after-${uid}`;
 ---
 <div class:list={["spoiler-container my-8",hasImages && "md:flex md:gap-8"]}>
     {hasImages && (
         <div class="md:w-1/3 mb-4 md:mb-0">
             <div class="relative aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
-                <Image id="image-before" src={imageBefore} alt="Before the play." width={600} height={800} class="absolute inset-0 w-full h-full object-cover" />
-                <Image id="image-after" src={imageAfter} alt="After the play." width={600} height={800} class="absolute inset-0 w-full h-full object-cover" />
+                <Image id={idBefore} src={imageBefore} alt="Before the play." width={600} height={800} class="image-before absolute inset-0 w-full h-full object-cover" />
+                <Image id={idAfter} src={imageAfter} alt="After the play." width={600} height={800} class="image-after absolute inset-0 w-full h-full object-cover" />
             </div>
             <div class="flex items-center justify-center gap-2 mt-3">
-                <button id="toggle-before" class="image-toggle">Inicio</button>
-                <button id="toggle-after" class="image-toggle">Fin</button>
+                <button id={idToggleBefore} class="image-toggle image-toggle-before">Inicio</button>
+                <button id={idToggleAfter} class="image-toggle image-toggle-after">Fin</button>
             </div>
         </div>
         )}
@@ -44,8 +49,8 @@ const hasImages = imageBefore && imageAfter;
     container.setAttribute('data-initialized', 'true');
 
     const reviewContent = container.querySelector('.spoiler-content');
-    const toggleBefore = container.querySelector('#toggle-before');
-    const toggleAfter = container.querySelector('#toggle-after');
+    const toggleBefore = container.querySelector('.image-toggle-before');
+    const toggleAfter = container.querySelector('.image-toggle-after');
 
     if (reviewContent){
         reviewContent.addEventListener('click', () => {
@@ -75,11 +80,11 @@ const hasImages = imageBefore && imageAfter;
 </script>
 
 <style>
-  .spoiler-container #image-after {
+  .spoiler-container .image-after {
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
   }
-  .spoiler-container.image-after-active #image-after {
+  .spoiler-container.image-after-active .image-after {
     opacity: 1;
   }
   .spoiler-content .blur-sm {
@@ -100,16 +105,16 @@ const hasImages = imageBefore && imageAfter;
   .image-toggle {
     @apply font-sans text-sm font-bold py-1 px-4 rounded-full border-2 border-brand-peach transition-colors;
   }
-  .image-toggle#toggle-before {
+  .image-toggle.image-toggle-before {
     @apply bg-brand-peach text-brand-dark;
   }
-  .image-toggle#toggle-after {
+  .image-toggle.image-toggle-after {
     @apply bg-transparent text-brand-text;
   }
-  .spoiler-container.image-after-active .image-toggle#toggle-before {
+  .spoiler-container.image-after-active .image-toggle.image-toggle-before {
     @apply bg-transparent text-brand-text;
   }
-  .spoiler-container.image-after-active .image-toggle#toggle-after {
+  .spoiler-container.image-after-active .image-toggle.image-toggle-after {
     @apply bg-brand-peach text-brand-dark;
   }
 </style>

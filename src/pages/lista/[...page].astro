@@ -16,8 +16,7 @@ const { data: paginatedObras } = page;
 ---
 <MainLayout>
     <div class="container mx-auto py-12 px-4">
-        <main class="lg:col-span-9">
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
                 {paginatedObras.map(play => (
                     <PlayCard
                         title={play.data.title}
@@ -28,8 +27,7 @@ const { data: paginatedObras } = page;
                         slug={play.slug}
                     />
                 ))}
-            </div>
-        </main>
+        </div>
         <PaginationControls page={page} />
     </div>
 </MainLayout>

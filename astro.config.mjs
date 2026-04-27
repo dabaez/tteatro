@@ -8,6 +8,6 @@ import pagefind from "astro-pagefind";
 export default defineConfig({
   integrations: [mdx(), tailwind(), pagefind()],
   redirects: {
-    '': '/lista'
+    '/': '/lista'
   }
 });

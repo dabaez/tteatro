@@ -29,13 +29,13 @@ const { data: paginatedPlays, currentPage } = page;
   description={`Obras de la compañía ${originalCompany}.`}
 >
   <div class="container mx-auto py-12 px-4">
-    <div class="text-center mb-8">
-      <p class="font-sans text-brand-text/70">Mostrando obras de la compañía</p>
-      <h1 class="font-display text-4xl text-brand-dark">{originalCompany}</h1>
+    <div class="mb-10">
+      <a href="/lista" class="font-sans text-sm text-brand-red hover:text-brand-dark transition-colors inline-flex items-center gap-1 mb-6">&larr; Todas las obras</a>
+      <p class="font-sans text-sm text-brand-text/60 uppercase tracking-widest mb-1">Compañía</p>
+      <h1 class="font-display text-5xl md:text-6xl text-brand-dark">{originalCompany}</h1>
     </div>
 
-    <main class="lg:col-span-9">
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-8">
       {paginatedPlays.map(obra => (
         <PlayCard 
           title={obra.data.title}

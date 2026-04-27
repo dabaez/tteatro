@@ -1,17 +1,17 @@
 ---
 import Search from "astro-pagefind/components/Search";
 ---
-<header class="py-6 border-b border-brand-dark/10 bg-brand-peach/30">
-  <div class="container mx-auto px-4 flex justify-between items-center">
-    <div>
-      <a href="/" class="font-display text-2xl font-bold text-brand-dark hover:text-brand-red transition-colors">
+<header class="border-b border-brand-dark/10 bg-brand-peach/30">
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center gap-6">
+    <div class="flex-shrink-0">
+      <a href="/lista" class="font-display text-2xl font-bold text-brand-dark hover:text-brand-red transition-colors">
         Tteatro
       </a>
-      <p class="font-sans text-sm italic text-brand-text/70 mt-1">
+      <p class="font-sans text-sm italic text-brand-text/60 mt-0.5">
         La extra t es por teatro
       </p>
     </div>
-    <div>
+    <div class="flex-shrink-0">
       <Search id="search" className="pagefind-ui" uiOptions={{ showImages: false }} />
     </div>
   </div>
@@ -20,6 +20,44 @@ import Search from "astro-pagefind/components/Search";
   nav {
     display: grid;
     place-items: center;
+  }
+
+  :root {
+    --pagefind-ui-scale: 0.85;
+    --pagefind-ui-primary: #e54b4b;
+    --pagefind-ui-text: #444140;
+    --pagefind-ui-background: #f7ebe8;
+    --pagefind-ui-border: #ffa987;
+    --pagefind-ui-tag: #ffa987;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 6px;
+    --pagefind-ui-font: 'Lexend Deca', sans-serif;
+  }
+
+  .pagefind-ui__form::before {
+    background-color: #444140 !important;
+    opacity: 0.5;
+  }
+
+  .pagefind-ui__search-input {
+    font-family: 'Lexend Deca', sans-serif !important;
+    background-color: #f7ebe8 !important;
+    border-color: #ffa987 !important;
+    color: #444140 !important;
+  }
+
+  .pagefind-ui__search-input:focus {
+    border-color: #e54b4b !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(229, 75, 75, 0.2) !important;
+  }
+
+  .pagefind-ui__search-clear {
+    color: #444140 !important;
+  }
+
+  .pagefind-ui__search-clear:focus {
+    outline-color: #e54b4b !important;
   }
 
   .pagefind-ui .pagefind-ui__drawer:not(.pagefind-ui__hidden) {

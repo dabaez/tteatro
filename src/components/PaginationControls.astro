@@ -18,12 +18,12 @@ const { url, currentPage, lastPage } = page;
       <div class="flex space-x-2">
         {url.prev ? (
           <a href={url.prev} class="pagination-link">
-            <div class="mr-1 flex-shrink:0">&larr;</div>
+            <div class="mr-1 flex-shrink-0">&larr;</div>
             <div class="pagination-text">Página anterior</div>
           </a>
         ) : (
           <span class="pagination-link-disabled">
-            <div class="mr-1 flex-shrink:0">&larr;</div>
+            <div class="mr-1 flex-shrink-0">&larr;</div>
             <div class="pagination-text">Página anterior</div>
           </span>
         )}
@@ -39,12 +39,12 @@ const { url, currentPage, lastPage } = page;
         {url.next ? (
           <a href={url.next} class="pagination-link">
             <div class="pagination-text">Próxima página</div>
-            <div class="mr-1 flex-shrink:0">&rarr;</div>
+            <div class="mr-1 flex-shrink-0">&rarr;</div>
           </a>
         ) : (
           <span class="pagination-link-disabled">
             <div class="pagination-text">Próxima página</div>
-            <div class="mr-1 flex-shrink:0">&rarr;</div>
+            <div class="mr-1 flex-shrink-0">&rarr;</div>
           </span>
         )}
       </div>

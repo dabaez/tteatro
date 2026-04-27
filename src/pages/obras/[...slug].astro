@@ -29,16 +29,16 @@ const recommendations = frontmatter.tags
     .filter(Boolean);
 ---
 
-<MainLayout description={frontmatter.title}>
+<MainLayout title={frontmatter.title}>
 
-    <header class="relative w-full h-[50vh] md:h-[60vh] flex items-center justify-center">
+    <header class="relative w-full h-[60vh] md:h-[75vh] flex items-center justify-center">
         <Image src={frontmatter.image}
             alt={`Imagen de ${frontmatter.title}`}
             class="absolute inset-0 w-full h-full object-cover"
             widths={[400,800,1200]}
             sizes="(max-width: 800px) 100vw, 1200px"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-brand-bg/70 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-bg via-brand-bg/50 to-transparent"></div>
         <h1 class="relative z-10 font-display text-5xl md:text-7xl text-brand-dark text-center px-4 drop-shadow-lg">
             {frontmatter.title}
         </h1>
@@ -48,12 +48,12 @@ const recommendations = frontmatter.tags
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="
-                    absolute bottom-4
+                    absolute bottom-6
                     bg-brand-red text-white 
-                    px-3 py-1
+                    px-8 py-3
                     rounded-lg 
-                    font-sans font-bold text-xl uppercase tracking-wider
-                    hover:bg-brand-dark-red
+                    font-sans font-bold text-lg uppercase tracking-wider
+                    hover:bg-brand-dark-red transition-colors shadow-lg
                 "
             >
                 EN CARTELERA
@@ -62,6 +62,7 @@ const recommendations = frontmatter.tags
     </header>
 
     <div class="container mx-auto px-4 py-8 md:py-12">
+            <a href="/lista" class="font-sans text-sm text-brand-red hover:text-brand-dark transition-colors inline-flex items-center gap-1 mb-8">&larr; Todas las obras</a>
             <section class="flex flex-wrap justify-between items-center gap-4 mb-8">
                 <div class="flex flex-wrap gap-2">
                     {frontmatter.tags.map(tag => <Tag tag_name={tag} />)}
