@@ -5,15 +5,18 @@ import PaginationControls from '../../../components/PaginationControls.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../../../utils/slugify.js';
 import { sort } from '../../../utils/sort.js';
+import ticketsRaw from '../../../data/tickets.json';
+const ticketsData = ticketsRaw as Record<string, string>;
 
 export async function getStaticPaths({ paginate }) { 
+  const ticketsData = (await import('../../../data/tickets.json')).default as Record<string, string>;
   const allPlays = await getCollection('obras');
   const uniqueCompanies = [...new Set(allPlays.flatMap(play => play.data.company))];
 
   return uniqueCompanies.flatMap(company => {
     const slug = slugify(company);
     const filteredPlays = allPlays.filter(play => play.data.company === company);
-    const sortedPlays = sort(filteredPlays);
+    const sortedPlays = sort(filteredPlays, ticketsData);
     return paginate(sortedPlays, {
       pageSize: 6,
       params: { company: slug },
@@ -43,7 +46,7 @@ const { data: paginatedPlays, currentPage } = page;
           tags={obra.data.tags}
           slug={obra.slug}
           landscapeImage={obra.data.image}
-          tickets={obra.data.tickets}
+          tickets={ticketsData[obra.slug]}
         />
       ))}
     </div>

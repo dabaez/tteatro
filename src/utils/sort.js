@@ -1,7 +1,9 @@
-export function sort(obras) {
+export function sort(obras, ticketsData = {}) {
     return obras.sort((a, b) => {
-        if (a.data.tickets && !b.data.tickets) return -1;
-        if (!a.data.tickets && b.data.tickets) return 1;
+        const aHasTicket = !!ticketsData[a.slug];
+        const bHasTicket = !!ticketsData[b.slug];
+        if (aHasTicket && !bHasTicket) return -1;
+        if (!aHasTicket && bHasTicket) return 1;
         return new Date(b.data.published).getTime() - new Date(a.data.published).getTime();
     });
 }

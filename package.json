@@ -7,7 +7,9 @@
     "build": "astro build && pnpm exec pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "np": "node scripts/new-post.js"
+    "np": "node scripts/new-post.js",
+    "update-tickets": "node scripts/update-tickets.js",
+    "update-tickets:dry": "node scripts/update-tickets.js --dry-run"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.4",

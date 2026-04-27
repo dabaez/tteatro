@@ -6,6 +6,8 @@ import Tag from "../../components/Tag.astro";
 import "../../styles/global.css";
 import { slugify } from '../../utils/slugify';
 import { tagRecommendations } from '../../utils/tag-recommendations';
+import ticketsRaw from '../../data/tickets.json';
+const ticketsData = ticketsRaw as Record<string, string>;
 
 export async function getStaticPaths(){
     const obras = await getCollection("obras");
@@ -27,6 +29,7 @@ const company_href = `/compannia/${slugify(frontmatter.company)}`;
 const recommendations = frontmatter.tags
     .map(tag => tagRecommendations[tag])
     .filter(Boolean);
+const ticketUrl = ticketsData[obra.slug];
 ---
 
 <MainLayout title={frontmatter.title}>
@@ -42,9 +45,9 @@ const recommendations = frontmatter.tags
         <h1 class="relative z-10 font-display text-5xl md:text-7xl text-brand-dark text-center px-4 drop-shadow-lg">
             {frontmatter.title}
         </h1>
-        {frontmatter.tickets && (
+        {ticketUrl && (
             <a 
-                href={frontmatter.tickets} 
+                href={ticketUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 class="

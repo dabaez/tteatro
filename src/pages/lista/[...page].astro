@@ -4,10 +4,13 @@ import PlayCard from "../../components/PlayCard.astro"
 import PaginationControls from "../../components/PaginationControls.astro";
 import { getCollection } from "astro:content";
 import { sort } from "../../utils/sort";
+import ticketsRaw from '../../data/tickets.json';
+const ticketsData = ticketsRaw as Record<string, string>;
 
 export async function getStaticPaths({ paginate }){
+    const ticketsData = (await import('../../data/tickets.json')).default as Record<string, string>;
     const allPlays = await getCollection('obras');
-    const sortedPlays = sort(allPlays);
+    const sortedPlays = sort(allPlays, ticketsData);
     return paginate(sortedPlays, { pageSize: 6 });
 }
 
@@ -23,7 +26,7 @@ const { data: paginatedObras } = page;
                         company={play.data.company}
                         tags={play.data.tags}
                         landscapeImage={play.data.image}
-                        tickets={play.data.tickets}
+                        tickets={ticketsData[play.slug]}
                         slug={play.slug}
                     />
                 ))}
