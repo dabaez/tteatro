@@ -9,6 +9,11 @@
  * Each card is server-side rendered with a data-title attribute and a
  * data-href pointing to the show's /obra/ page.
  *
+ * For each matched show the script fetches its /obra/ page to extract the
+ * real vendor ticket URL (ticketmaster, ticketplus, passline, etc.) embedded
+ * in the page content. If no vendor link is found it falls back to the
+ * telonticket obra URL.
+ *
  * Usage:
  *   node scripts/update-tickets.js              # update tickets.json
  *   node scripts/update-tickets.js --dry-run    # preview only
@@ -17,9 +22,45 @@
 import fs from 'fs';
 import path from 'path';
 
-const CONTENT_DIR    = 'src/content/obras';
-const TICKETS_JSON   = 'src/data/tickets.json';
+const CONTENT_DIR     = 'src/content/obras';
+const TICKETS_JSON    = 'src/data/tickets.json';
 const TELONTICKET_URL = 'https://telonticket.cl/';
+const HEADERS         = { 'User-Agent': 'Mozilla/5.0 (compatible; tteatro-bot/1.0)' };
+
+// ---------------------------------------------------------------------------
+// HTML helpers (shared with create-obra.js logic)
+// ---------------------------------------------------------------------------
+function stripTags(html) {
+  return html
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
+    .replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+}
+
+function extractContentDiv(html) {
+  const m = html.match(/<div[^>]*class="[^"]*mpwem_details_content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/);
+  return m ? m[1] : html;
+}
+
+// Returns the real vendor ticket URL embedded in the obra page content
+// ("Comprar entradas" / "Entradas" links pointing to ticketmaster, ticketplus, etc.)
+// Falls back to the telonticket obra URL if no vendor link is found.
+async function fetchVendorTicketUrl(obraUrl) {
+  try {
+    const res = await fetch(obraUrl, { headers: HEADERS });
+    if (!res.ok) return obraUrl;
+    const html    = await res.text();
+    const content = extractContentDiv(html);
+    const linkRe  = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+    for (const m of content.matchAll(linkRe)) {
+      const href = m[1].trim();
+      const text = stripTags(m[2]);
+      if (/entr(?:ada|adas)|tickets?|comprar/i.test(text)) return href;
+    }
+  } catch {}
+  return obraUrl;   // fallback: the telonticket page itself
+}
 
 // ---------------------------------------------------------------------------
 // Title normalisation
@@ -52,9 +93,7 @@ function titlesMatch(rawA, rawB) {
 // Returns Map<title, obraUrl>
 // ---------------------------------------------------------------------------
 async function fetchShows() {
-  const response = await fetch(TELONTICKET_URL, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; tteatro-bot/1.0)' },
-  });
+  const response = await fetch(TELONTICKET_URL, { headers: HEADERS });
   if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
   const html = await response.text();
 
@@ -137,12 +176,13 @@ async function main() {
     const prevUrl = existing[slug];
 
     if (matchedUrl) {
-      newTickets[slug] = matchedUrl;
-      if (matchedUrl !== prevUrl) {
+      const ticketUrl = await fetchVendorTicketUrl(matchedUrl);
+      newTickets[slug] = ticketUrl;
+      if (ticketUrl !== prevUrl) {
         const tag = prevUrl ? 'UPDATE' : 'ADD   ';
         console.log(`  ${tag} "${obraTitle}"`);
         console.log(`         telonticket: "${matchedTitle}"`);
-        console.log(`         → ${matchedUrl}`);
+        console.log(`         → ${ticketUrl}`);
         stats.added++;
       } else {
         stats.unchanged++;
