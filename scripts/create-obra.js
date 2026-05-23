@@ -430,6 +430,23 @@ async function processUrl(url, dryRun) {
 }
 
 // ---------------------------------------------------------------------------
+// Interactive selection prompt
+// ---------------------------------------------------------------------------
+async function promptSelection(candidates) {
+  const { createInterface } = await import('readline');
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+  return new Promise(resolve => {
+    rl.question(`Select [1-${candidates.length}] (default 1): `, answer => {
+      rl.close();
+      const n = parseInt(answer.trim(), 10);
+      const idx = Number.isInteger(n) && n >= 1 && n <= candidates.length ? n - 1 : 0;
+      resolve(candidates[idx]);
+    });
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
@@ -464,23 +481,24 @@ async function main() {
 
   const best = matches[0];
 
-  if (matches.length === 1 || best.score === 1.0) {
+  if (matches.length === 1) {
     // Unambiguous match
     console.log(`Found: ${best.url}`);
     await processUrl(best.url, dryRun);
     return;
   }
 
-  // Multiple candidates — show top results and pick the best automatically,
-  // but warn so the user can correct it next time.
-  console.log(`Top matches for "${input}":`);
-  matches.slice(0, 5).forEach((m, i) => {
-    const marker = i === 0 ? ' ← using this one' : '';
-    console.log(`  [${i+1}] (${Math.round(m.score * 100)}%) ${m.url}${marker}`);
+  // Multiple candidates — let the user pick interactively.
+  const top = matches.slice(0, 5);
+  console.log(`Multiple matches for "${input}":\n`);
+  top.forEach((m, i) => {
+    console.log(`  [${i + 1}] (${Math.round(m.score * 100)}%) ${m.url}`);
   });
   console.log();
 
-  await processUrl(best.url, dryRun);
+  const chosen = await promptSelection(top);
+  console.log();
+  await processUrl(chosen.url, dryRun);
 }
 
 main().catch(err => {
