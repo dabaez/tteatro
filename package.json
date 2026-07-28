@@ -3,8 +3,8 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && pnpm exec pagefind --site dist",
+    "dev": "node scripts/ensure-tickets.js && astro dev",
+    "build": "node scripts/ensure-tickets.js && astro build && pnpm exec pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
     "np": "node scripts/new-post.js",
