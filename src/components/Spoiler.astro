@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 interface Props {
     imageBefore?: ImageMetadata;
     imageAfter?: ImageMetadata;
@@ -42,80 +42,3 @@ const idToggleAfter = `toggle-after-${uid}`;
   </div>
 </div>
 
-<script>
-  function setupSpoilers() {
-    document.querySelectorAll('.spoiler-container').forEach(container => {
-    if (container.hasAttribute('data-initialized')) return;
-    container.setAttribute('data-initialized', 'true');
-
-    const reviewContent = container.querySelector('.spoiler-content');
-    const toggleBefore = container.querySelector('.image-toggle-before');
-    const toggleAfter = container.querySelector('.image-toggle-after');
-
-    if (reviewContent){
-        reviewContent.addEventListener('click', () => {
-            container.classList.add('text-revealed');
-            if (toggleAfter) {
-            container.classList.add('image-after-active');
-            }
-        }, { once: true });
-    }
-
-    if (toggleBefore && toggleAfter) {
-    toggleBefore.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.classList.remove('image-after-active');
-    });
-
-    toggleAfter.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.classList.add('image-after-active');
-    });
-    }
-    });
-  }
-
-  document.addEventListener('astro:page-load', setupSpoilers);
-  setupSpoilers();
-</script>
-
-<style>
-  @reference "../styles/global.css";
-  .spoiler-container .image-after {
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
-  }
-  .spoiler-container.image-after-active .image-after {
-    opacity: 1;
-  }
-  .spoiler-content .blur-sm {
-    filter: blur(4px);
-    transition: filter 0.3s ease-in-out;
-    pointer-events: none;
-  }
-  .spoiler-container.text-revealed .spoiler-content .blur-sm {
-    filter: none;
-    pointer-events: auto;
-  }
-  .spoiler-container.text-revealed .spoiler-content .prompt {
-    opacity: 0;
-  }
-  .spoiler-container.text-revealed .spoiler-content {
-    cursor: default; 
-  }
-  .image-toggle {
-    @apply font-sans text-sm font-bold py-1 px-4 rounded-full border-2 border-brand-peach transition-colors;
-  }
-  .image-toggle.image-toggle-before {
-    @apply bg-brand-peach text-brand-dark;
-  }
-  .image-toggle.image-toggle-after {
-    @apply bg-transparent text-brand-text;
-  }
-  .spoiler-container.image-after-active .image-toggle.image-toggle-before {
-    @apply bg-transparent text-brand-text;
-  }
-  .spoiler-container.image-after-active .image-toggle.image-toggle-after {
-    @apply bg-brand-peach text-brand-dark;
-  }
-</style>

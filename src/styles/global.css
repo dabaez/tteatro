@@ -26,3 +26,56 @@
     @apply text-brand-red transition-colors hover:text-brand-dark;
   }
 }
+
+/* Spoiler component styles.
+   Kept global (not in Spoiler.astro's scoped <style>) because Astro 7 does not
+   bundle a component's scoped styles when the component is used only inside MDX. */
+.spoiler-container .image-after {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.spoiler-container.image-after-active .image-after {
+  opacity: 1;
+}
+.spoiler-content .blur-sm {
+  filter: blur(4px);
+  transition: filter 0.3s ease-in-out;
+  pointer-events: none;
+}
+.spoiler-container.text-revealed .spoiler-content .blur-sm {
+  filter: none;
+  pointer-events: auto;
+}
+.spoiler-container.text-revealed .spoiler-content .prompt {
+  opacity: 0;
+}
+.spoiler-container.text-revealed .spoiler-content {
+  cursor: default;
+}
+.image-toggle {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-brand-peach);
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+}
+.image-toggle.image-toggle-before {
+  background-color: var(--color-brand-peach);
+  color: var(--color-brand-dark);
+}
+.image-toggle.image-toggle-after {
+  background-color: transparent;
+  color: var(--color-brand-text);
+}
+.spoiler-container.image-after-active .image-toggle.image-toggle-before {
+  background-color: transparent;
+  color: var(--color-brand-text);
+}
+.spoiler-container.image-after-active .image-toggle.image-toggle-after {
+  background-color: var(--color-brand-peach);
+  color: var(--color-brand-dark);
+}

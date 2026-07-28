@@ -95,3 +95,42 @@ const ticketUrl = ticketsData[obra.id];
         @apply font-display text-brand-dark;
     }
 </style>
+
+<!-- Spoiler interactivity. Lives on the page (not in Spoiler.astro) because Astro 7
+     does not emit a component's <script> when the component is used inside MDX. -->
+<script>
+  function setupSpoilers() {
+    document.querySelectorAll('.spoiler-container').forEach(container => {
+      if (container.hasAttribute('data-initialized')) return;
+      container.setAttribute('data-initialized', 'true');
+
+      const reviewContent = container.querySelector('.spoiler-content');
+      const toggleBefore = container.querySelector('.image-toggle-before');
+      const toggleAfter = container.querySelector('.image-toggle-after');
+
+      if (reviewContent) {
+        reviewContent.addEventListener('click', () => {
+          container.classList.add('text-revealed');
+          if (toggleAfter) {
+            container.classList.add('image-after-active');
+          }
+        }, { once: true });
+      }
+
+      if (toggleBefore && toggleAfter) {
+        toggleBefore.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.classList.remove('image-after-active');
+        });
+
+        toggleAfter.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.classList.add('image-after-active');
+        });
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupSpoilers);
+  setupSpoilers();
+</script>
