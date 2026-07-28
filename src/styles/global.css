@@ -1,8 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Lexend+Deca:wght@100..900&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-brand-red: #e54b4b;
+  --color-brand-dark-red: #c73c3c;
+  --color-brand-peach: #ffa987;
+  --color-brand-bg: #f7ebe8;
+  --color-brand-text: #444140;
+  --color-brand-dark: #1e1e24;
+
+  --font-display: 'Caprasimo', cursive;
+  --font-sans: 'Lexend Deca', sans-serif;
+}
 
 @layer base {
   body {

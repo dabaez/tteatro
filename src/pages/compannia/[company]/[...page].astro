@@ -44,9 +44,9 @@ const { data: paginatedPlays, currentPage } = page;
           title={obra.data.title}
           company={obra.data.company}
           tags={obra.data.tags}
-          slug={obra.slug}
+          slug={obra.id}
           landscapeImage={obra.data.image}
-          tickets={ticketsData[obra.slug]}
+          tickets={ticketsData[obra.id]}
         />
       ))}
     </div>

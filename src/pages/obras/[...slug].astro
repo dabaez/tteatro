@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import MainLayout from "../../layouts/MainLayout.astro";
 import Tag from "../../components/Tag.astro";
@@ -12,7 +12,7 @@ const ticketsData = ticketsRaw as Record<string, string>;
 export async function getStaticPaths(){
     const obras = await getCollection("obras");
     return obras.map((obra) => ({
-        params: { slug: obra.slug },
+        params: { slug: obra.id },
         props: { obra },
     }));
 }
@@ -23,13 +23,13 @@ type Props = {
 const { obra } = Astro.props;
 const {data: frontmatter} = obra;
 
-const { Content } = await obra.render()
+const { Content } = await render(obra)
 const company_href = `/compannia/${slugify(frontmatter.company)}`;
 
 const recommendations = frontmatter.tags
     .map(tag => tagRecommendations[tag])
     .filter(Boolean);
-const ticketUrl = ticketsData[obra.slug];
+const ticketUrl = ticketsData[obra.id];
 ---
 
 <MainLayout title={frontmatter.title}>
@@ -90,6 +90,7 @@ const ticketUrl = ticketsData[obra.slug];
 </MainLayout>
 
 <style is:global>
+    @reference "../../styles/global.css";
     .prose h1, .prose h2, .prose h3 {
         @apply font-display text-brand-dark;
     }
