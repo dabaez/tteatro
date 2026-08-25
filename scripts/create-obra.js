@@ -29,7 +29,7 @@ import path from 'path';
 const CONTENT_DIR   = 'src/content/obras';
 const ASSETS_DIR    = 'src/assets';
 const TICKETS_JSON  = 'src/data/tickets.json';
-const SITEMAP_URL   = 'https://telonticket.cl/wp-sitemap-posts-mep_events-1.xml';
+const SITEMAP_INDEX = 'https://telonticket.cl/wp-sitemap.xml';
 
 const HEADERS = { 'User-Agent': 'Mozilla/5.0 (compatible; tteatro-bot/1.0)' };
 
@@ -68,14 +68,36 @@ function stripTags(html) {
 // ---------------------------------------------------------------------------
 // Sitemap — discovers ALL obra URLs (current and past)
 // ---------------------------------------------------------------------------
-async function fetchSitemapUrls() {
-  const res = await fetch(SITEMAP_URL, { headers: HEADERS });
-  if (!res.ok) throw new Error(`Sitemap fetch failed: HTTP ${res.status}`);
+// telonticket serves its sitemaps with a bogus HTTP 404 status but a perfectly
+// valid XML body, so we validate the body instead of trusting res.ok.
+async function fetchSitemapXml(url) {
+  const res = await fetch(url, { headers: HEADERS });
   const xml = await res.text();
-  return [...xml.matchAll(/https:\/\/telonticket\.cl\/obra\/([^<\s]+)/g)].map(m => ({
-    url:  m[0].trim(),
-    slug: m[1].replace(/\/$/, ''),   // URL slug (with hyphens)
-  }));
+  if (!/<(?:urlset|sitemapindex)\b/.test(xml)) {
+    throw new Error(`Sitemap fetch failed: HTTP ${res.status} for ${url}`);
+  }
+  return xml;
+}
+
+// The obra catalogue is paginated (WP caps a sitemap page at 2000 URLs), so we
+// read the index and follow every mep_events page rather than assuming page 1.
+async function fetchSitemapUrls() {
+  const indexXml = await fetchSitemapXml(SITEMAP_INDEX);
+  const pages = [...indexXml.matchAll(/<loc>\s*([^<\s]*mep_events-\d+\.xml)\s*<\/loc>/g)]
+    .map(m => m[1]);
+  if (pages.length === 0) {
+    throw new Error('No mep_events sitemap pages found in the sitemap index.');
+  }
+
+  const xmls = await Promise.all(pages.map(fetchSitemapXml));
+  const seen = new Map();
+  for (const xml of xmls) {
+    for (const m of xml.matchAll(/https:\/\/telonticket\.cl\/obra\/([^<\s]+)/g)) {
+      const slug = m[1].replace(/\/$/, '');   // URL slug (with hyphens)
+      if (!seen.has(slug)) seen.set(slug, { url: m[0].trim(), slug });
+    }
+  }
+  return [...seen.values()];
 }
 
 // Score how well a sitemap slug matches a user search string.
