@@ -14,6 +14,9 @@
  * in the page content. If no vendor link is found it falls back to the
  * telonticket obra URL.
  *
+ * URLs listed in src/data/ticket-blocklist.json are skipped — useful when
+ * telonticket lists a different company's staging of a play we reviewed.
+ *
  * Usage:
  *   node scripts/update-tickets.js              # update tickets.json
  *   node scripts/update-tickets.js --dry-run    # preview only
@@ -24,8 +27,24 @@ import path from 'path';
 
 const CONTENT_DIR     = 'src/content/obras';
 const TICKETS_JSON    = 'src/data/tickets.json';
+const BLOCKLIST_JSON  = 'src/data/ticket-blocklist.json';
 const TELONTICKET_URL = 'https://telonticket.cl/';
 const HEADERS         = { 'User-Agent': 'Mozilla/5.0 (compatible; tteatro-bot/1.0)' };
+
+// ---------------------------------------------------------------------------
+// Blocklist — ticket URLs we refuse to publish (see ticket-blocklist.json)
+// ---------------------------------------------------------------------------
+function loadBlocklist() {
+  if (!fs.existsSync(BLOCKLIST_JSON)) return [];
+  const data = JSON.parse(fs.readFileSync(BLOCKLIST_JSON, 'utf-8'));
+  return (data.blocked ?? []).filter(e => e && e.url);
+}
+
+// Returns the matching blocklist entry, or null.
+function blockedEntry(url, blocklist) {
+  if (!url) return null;
+  return blocklist.find(e => url.includes(e.url)) ?? null;
+}
 
 // ---------------------------------------------------------------------------
 // HTML helpers (shared with create-obra.js logic)
@@ -133,7 +152,8 @@ async function main() {
 
   console.log(`Fetching currently active shows from ${TELONTICKET_URL}...`);
 
-  const shows = await fetchShows();
+  const shows     = await fetchShows();
+  const blocklist = loadBlocklist();
 
   if (shows.size === 0) {
     console.error('\nNo shows found. Check your network connection or the page structure may have changed.');
@@ -147,7 +167,7 @@ async function main() {
     : {};
 
   const newTickets = {};
-  const stats = { added: 0, cleared: 0, unchanged: 0, unmatched: 0 };
+  const stats = { added: 0, cleared: 0, unchanged: 0, unmatched: 0, blocked: 0 };
 
   const files = fs.readdirSync(CONTENT_DIR)
     .filter(f => f.endsWith('.mdx') || f.endsWith('.md'))
@@ -175,8 +195,21 @@ async function main() {
 
     const prevUrl = existing[slug];
 
+    let blocked = blockedEntry(matchedUrl, blocklist);
+    let ticketUrl = null;
+    if (matchedUrl && !blocked) {
+      ticketUrl = await fetchVendorTicketUrl(matchedUrl);
+      blocked   = blockedEntry(ticketUrl, blocklist);
+    }
+
+    if (blocked) {
+      console.log(`  BLOCK  "${obraTitle}" — ${blocked.reason ?? 'blocklisted'}`);
+      console.log(`         matched: ${blocked.url}`);
+      stats.blocked++;
+      continue;
+    }
+
     if (matchedUrl) {
-      const ticketUrl = await fetchVendorTicketUrl(matchedUrl);
       newTickets[slug] = ticketUrl;
       if (ticketUrl !== prevUrl) {
         const tag = prevUrl ? 'UPDATE' : 'ADD   ';
@@ -200,7 +233,8 @@ async function main() {
 
   console.log(
     `\nResult: ${stats.added} added/updated, ${stats.cleared} cleared, ` +
-    `${stats.unchanged} already up-to-date, ${stats.unmatched} not listed.`
+    `${stats.unchanged} already up-to-date, ${stats.unmatched} not listed, ` +
+    `${stats.blocked} blocked.`
   );
 
   if (!dryRun) {

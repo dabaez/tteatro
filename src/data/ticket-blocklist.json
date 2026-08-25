@@ -1,0 +1,9 @@
+{
+  "_comment": "Ticket links that must never be published, even when telonticket.cl lists the show. Each entry is matched as a SUBSTRING against both the telonticket obra URL and the vendor URL; a match means the obra is treated as having no tickets. Used by scripts/update-tickets.js (when writing tickets.json) and scripts/ensure-tickets.js (prunes an already-written tickets.json before every build).",
+  "blocked": [
+    {
+      "url": "ticketmaster.cl/event/animas-de-dia-claro-teatro-nescafe-de-las-artes",
+      "reason": "Montaje del Teatro Nescafe de las Artes; la resena es del montaje de Colectivo CTM."
+    }
+  ]
+}
