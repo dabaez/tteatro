@@ -1,0 +1,41 @@
+name: Dependabot auto-merge
+
+# Enables GitHub auto-merge on Dependabot npm PRs that are either:
+#   - a security update (the npm-security group in dependabot.yml, any semver
+#     level), or
+#   - a patch version update.
+# Branch protection on main requires the CI `build` check, so GitHub only
+# performs the merge once it passes. Minor/major version updates and GitHub
+# Actions updates are left for manual review.
+#
+# Merging with GITHUB_TOKEN does not trigger deploy.yml; the change goes live
+# on the next push to main.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  automerge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - id: meta
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # --match-head-commit refuses the merge if the PR changes after this run.
+      - name: Enable auto-merge
+        if: >-
+          steps.meta.outputs.package-ecosystem == 'npm_and_yarn' &&
+          (steps.meta.outputs.update-type == 'version-update:semver-patch' ||
+           steps.meta.outputs.dependency-group == 'npm-security')
+        run: gh pr merge "$PR_URL" --auto --squash --match-head-commit "$HEAD_SHA"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
