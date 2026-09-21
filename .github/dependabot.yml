@@ -9,6 +9,13 @@ updates:
     cooldown:
       default-days: 5 # wait 5 days after a release before proposing it
     open-pull-requests-limit: 10
+    groups:
+      # dependabot-automerge.yml auto-merges this group by name; don't rename
+      # it without updating the workflow.
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
 
   - package-ecosystem: github-actions
     directory: /
