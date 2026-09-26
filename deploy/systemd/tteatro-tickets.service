@@ -1,0 +1,14 @@
+# Refreshes the ticket links and rebuilds the live release (deploy/build).
+# Started by tteatro-tickets.timer. receive-site installs both as the tteatro
+# user's own units on every deploy.
+#
+# Logs, as root: journalctl _SYSTEMD_USER_UNIT=tteatro-tickets.service
+
+[Unit]
+Description=tteatro: refresh ticket links and rebuild the site
+
+[Service]
+Type=oneshot
+# node has to be installed system-wide, on this PATH.
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/local/bin/receive-site rebuild

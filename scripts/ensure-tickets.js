@@ -2,7 +2,7 @@
  * ensure-tickets.js
  *
  * src/data/tickets.json is not tracked in git — it lives only on the server,
- * where update-tickets.js regenerates it (see scripts/deploy.sh). The Astro
+ * where update-tickets.js regenerates it (see deploy/build). The Astro
  * pages import it statically, so a fresh clone would fail to build/dev without
  * it. This creates an empty mapping if the file is missing.
  *

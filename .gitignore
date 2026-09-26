@@ -23,6 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# server-generated, updated by cron (scripts/update-tickets.js)
+# generated on the droplet by deploy/build (scripts/update-tickets.js)
 src/data/tickets.json
-.deploy.lock

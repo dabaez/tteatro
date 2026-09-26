@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# build — builds the site on the droplet, with fresh ticket links.
+#
+# receive-site (dabaez/droplet-infra) runs this as the tteatro user, from the
+# uploaded source (the release's app/), on every deploy and on every run of
+# deploy/systemd/tteatro-tickets.timer:
+#
+#   deploy/build <out-dir>
+#
+# RELEASE_REASON=deploy   new code. Ticket links start from the live release's
+#                         tickets.json (LIVE_APP is its source), so a failed
+#                         scrape builds with the previous links instead of none.
+# RELEASE_REASON=rebuild  the timer. A failed scrape stops here and the site
+#                         stays as it is.
+#
+set -euo pipefail
+
+OUT="$1"
+
+command -v node >/dev/null || {
+  echo "node isn't on PATH for $(id -un); install Node 22 system-wide" >&2
+  exit 1
+}
+
+# pnpm comes from corepack, at the version in package.json's packageManager.
+# `pnpm build` calls pnpm itself, so it has to be on PATH, not just `corepack pnpm`.
+export COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+mkdir -p "$HOME/.local/bin"
+corepack enable --install-directory "$HOME/.local/bin" pnpm
+export PATH="$HOME/.local/bin:$PATH"
+
+# Only the built site is kept. The store is pruned while node_modules still
+# exists, so the next install finds this build's packages without downloading.
+cleanup() {
+  pnpm store prune >/dev/null 2>&1 || true
+  rm -rf node_modules dist .astro
+}
+trap cleanup EXIT
+rm -rf node_modules dist .astro
+
+if [ "$RELEASE_REASON" = deploy ] && [ -n "${LIVE_APP:-}" ] && [ -f "$LIVE_APP/src/data/tickets.json" ]; then
+  cp "$LIVE_APP/src/data/tickets.json" src/data/tickets.json
+fi
+
+if ! node scripts/update-tickets.js; then
+  if [ "$RELEASE_REASON" = rebuild ]; then
+    echo "ticket scrape failed; leaving the site as it is" >&2
+    exit 1
+  fi
+  echo "ticket scrape failed; building with the previous ticket links" >&2
+fi
+
+pnpm install --frozen-lockfile
+pnpm build
+cp -r dist/. "$OUT"/
