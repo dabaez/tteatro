@@ -1,5 +1,5 @@
 [Unit]
-Description=tteatro: refresh ticket links twice a day
+Description=tteatro: refresh ticket links daily
 
 [Timer]
 OnCalendar=*-*-* 05:00:00
