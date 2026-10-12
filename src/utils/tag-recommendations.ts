@@ -14,6 +14,6 @@ export const tagRecommendations: Record<string, string> = {
   'Poética': 'Personas que buscan una obra que sacrifica realismo por diálogos más poéticos y simbólicos.',
   'Absurda': 'Personas que buscan una obra que exagera la realidad al límite para mostrarla desde otro ángulo.',
   'Emotiva': 'Personas que buscan una obra que les toque el corazón.',
-  'Realismo mágico': '',
+  'Realismo mágico': 'Personas que buscan una obra en la que lo ilógico es simplemente parte de la rutina.',
   'Especulativa': 'Personas que buscan una obra que explore mundos ficticios.',
 };
