@@ -11,7 +11,9 @@
     "np": "node scripts/new-post.js",
     "update-tickets": "node scripts/update-tickets.js",
     "update-tickets:dry": "node scripts/update-tickets.js --dry-run",
-    "create-obra": "node scripts/create-obra.js"
+    "create-obra": "node scripts/create-obra.js",
+    "tags": "node scripts/tags.js",
+    "tags:grid": "node scripts/tags-grid.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.2",

@@ -9,8 +9,11 @@ export const tagRecommendations: Record<string, string> = {
   'Tragedia ágil': 'Personas que buscan una tragedia que se narra como si fuera una comedia.',
   'Ligera': 'Personas que buscan una obra ligera, que no pese mucho en el ánimo.',
   'Densa': 'Personas que no temen a una obra que toque temas y situaciones duras.',
-  'Final feliz': 'Personas que buscan una obra con un final feliz que no los deje por el suelo (Se sorprenderían de cuántas obras no terminan bien).',
+  'Final amable': 'Personas que buscan una obra con un final que no los deje por el suelo. Pueden ser oscuras, pero dejan esperanza al final por lo menos.',
   'Realista': 'Personas que buscan una obra que se sienta realista y creíble.',
   'Poética': 'Personas que buscan una obra que sacrifica realismo por diálogos más poéticos y simbólicos.',
-  'Surreal': 'Personas que buscan una obra que exagera la realidad para mostrarla desde otro ángulo.',
+  'Absurda': 'Personas que buscan una obra que exagera la realidad al límite para mostrarla desde otro ángulo.',
+  'Emotiva': 'Personas que buscan una obra que les toque el corazón.',
+  'Realismo mágico': '',
+  'Especulativa': 'Personas que buscan una obra que explore mundos ficticios.',
 };

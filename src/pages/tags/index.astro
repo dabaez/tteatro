@@ -1,0 +1,40 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Tag from '../../components/Tag.astro';
+import { getCollection } from 'astro:content';
+import { tagRecommendations } from '../../utils/tag-recommendations';
+
+const allPlays = await getCollection('obras');
+const counts = new Map<string, number>();
+for (const play of allPlays) {
+  for (const tag of play.data.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+// Only tags with at least one play have a page to link to.
+const tags = [...counts.keys()].sort((a, b) => a.localeCompare(b, 'es'));
+---
+<MainLayout title="Tags">
+  <div class="container mx-auto py-12 px-4">
+    <div class="mb-10">
+      <a href="/lista" class="font-sans text-sm text-brand-red hover:text-brand-dark transition-colors inline-flex items-center gap-1 mb-6">&larr; Todas las obras</a>
+      <h1 class="font-display text-5xl md:text-6xl text-brand-dark">Tags</h1>
+    </div>
+
+    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 max-w-5xl">
+      {tags.map(tag => (
+        <li>
+          <div class="flex items-center gap-3 mb-2">
+            <Tag tag_name={tag} />
+            <span class="font-sans text-sm text-brand-text/60">
+              {counts.get(tag)} {counts.get(tag) === 1 ? 'obra' : 'obras'}
+            </span>
+          </div>
+          {tagRecommendations[tag] && (
+            <p class="font-sans text-brand-text/70">{tagRecommendations[tag]}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</MainLayout>
