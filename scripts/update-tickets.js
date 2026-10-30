@@ -24,6 +24,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { extractContentDiv } from './lib/telonticket.js';
 
 const CONTENT_DIR     = 'src/content/obras';
 const TICKETS_JSON    = 'src/data/tickets.json';
@@ -55,11 +56,6 @@ function stripTags(html) {
     .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&nbsp;/g, ' ').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n))
     .replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
-}
-
-function extractContentDiv(html) {
-  const m = html.match(/<div[^>]*class="[^"]*mpwem_details_content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/);
-  return m ? m[1] : html;
 }
 
 // Returns the real vendor ticket URL embedded in the obra page content

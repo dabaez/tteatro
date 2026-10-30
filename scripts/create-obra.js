@@ -25,6 +25,7 @@
 
 import fs   from 'fs';
 import path from 'path';
+import { extractContentDiv, sliceToEnclosingDivEnd } from './lib/telonticket.js';
 
 const CONTENT_DIR   = 'src/content/obras';
 const ASSETS_DIR    = 'src/assets';
@@ -144,12 +145,6 @@ function extractJsonLd(html) {
   return null;
 }
 
-// Extract only the main content div, avoiding sidebar noise (addresses, etc.)
-function extractContentDiv(html) {
-  const m = html.match(/<div[^>]*class="[^"]*mpwem_details_content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/);
-  return m ? m[1] : html;
-}
-
 // ---------------------------------------------------------------------------
 // Ficha heading detection — returns index of the start of the ficha section.
 // Handles:
@@ -240,7 +235,9 @@ function extractFicha(html) {
 
   if (section) {
     const { idx, isHTag } = section;
-    const chunk = content.slice(idx, idx + 8000);
+    // The ficha ends with the block holding its heading; anything after that
+    // (e.g. a sidebar list of Disciplina / País / Duración) isn't credits.
+    const chunk = sliceToEnclosingDivEnd(content, idx).slice(0, 8000);
 
     // h-tag heading → try Format A (pipe-separated, no colon) first
     if (isHTag) {
