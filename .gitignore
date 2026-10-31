@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # generated on the droplet by deploy/build (scripts/update-tickets.js)
 src/data/tickets.json
+
+# private review notes (never committed or shipped)
+notas/
